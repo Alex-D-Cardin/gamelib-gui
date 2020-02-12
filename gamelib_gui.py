@@ -32,6 +32,7 @@ class MainMenu(tk.Frame):
 class Search_Menu(tk.Frame):
     def __init__(self):
         tk.Frame.__init__(self)
+        
         self.lbl_title = tk.Label(text = "Search Menu", font = TITLE_FONT)
         self.lbl_title.grid(row = 0, column = 0, sticky = "news")
         self.btn_back = tk.Button(text = "Back", font = BUTTON_FONT)
@@ -48,7 +49,11 @@ class Search_Menu(tk.Frame):
         self.lbl_search_for = tk.Label(text = "Search For:", font = TITLE_FONT)
         self.lbl_search_for.grid(row = 3, column = 0)
         self.ent_for = tk.Entry(font = BUTTON_FONT)
-        self.ent_for.grid(row = 4, column = 0)        
+        self.ent_for.grid(row = 4, column = 0)
+        
+        self.lbl_filters = tk.Label(self, text = "Filters", font = TITLE_FONT)
+        self.lbl_filters.grid(row = 1, column = 2)
+        self.lbl_filters = SubFrame(self)
 
 class Save_Menu(tk.Frame):
     def __init__(self):
@@ -130,6 +135,45 @@ class Remove_Menu(tk.Frame):
         self.btn_confirm = tk.Button(text = "Confirm", font = BUTTON_FONT)
         self.btn_confirm.grid(row = 1, column = 1)        
 
+class SubFrame(tk.Frame):
+    def __init__(self, parent):
+        tk.Frame.__init__(self, master = parent)
+        
+        self.btn_single = tk.Checkbutton(self, text = "title")
+        self.btn_single.grid(row = 0, column = 0)
+        
+        self.btn_multi = tk.Checkbutton(self, text = "genre")
+        self.btn_multi.grid(row = 0, column = 1)
+        
+        self.btn_played = tk.Checkbutton(self, text = "Developer")
+        self.btn_played.grid(row = 0 , column = 2)
+        
+        self.btn_no_played = tk.Checkbutton(self, text = "Publisher")
+        self.btn_no_played.grid(row = 1, column = 0)
+        
+        self.btn_purchased = tk.Checkbutton(self, text = "Year")
+        self.btn_purchased.grid(row = 1, column = 1)
+        
+        self.btn_no_purchased = tk.Checkbutton(self, text = "Price")
+        self.btn_no_purchased.grid(row = 1, column = 2)
+        
+        self.btn_console = tk.Checkbutton(self, text = "Console")
+        self.btn_console.grid(row = 2, column = 0)
+        
+        self.btn_gamemode = tk.Checkbutton(self, text = "Gamemode")
+        self.btn_gamemode.grid(row = 2, column = 1)
+        
+        self.btn_notes = tk.Checkbutton(self, text = "Notes")
+        self.btn_notes.grid(row = 2, column = 2)
+        
+        self.grid_rowconfigure(0, weight = 1)
+        self.grid_rowconfigure(1, weight = 1)
+        self.grid_rowconfigure(2, weight = 1)
+        
+        self.grid_columnconfigure(0, weight = 1)
+        self.grid_columnconfigure(1, weight = 1)
+        self.grid_columnconfigure(2, weight = 1)
+
 #Functions go here
 
 
@@ -143,8 +187,8 @@ if __name__ == "__main__":
     #main_menu = MainMenu()
     #main_menu.grid(row = 0, column = 0)
     
-    #search_menu = Search_Menu()
-    #search_menu.grid(row = 0, column = 0)
+    search_menu = Search_Menu()
+    search_menu.grid(row = 0, column = 0)
     
     #save_menu = Save_Menu()
     #save_menu.grid(row = 0, column = 0)
@@ -152,8 +196,8 @@ if __name__ == "__main__":
     #edit_choice_menu = Edit_Choice_Menu()
     #edit_choice_menu.grid(row = 0, column = 0)
     
-    edit_menu = Edit_Menu()
-    edit_menu.grid(row = 0, column = 0)
+    #edit_menu = Edit_Menu()
+    #edit_menu.grid(row = 0, column = 0)
     
     #remove_choice_menu = Remove_Choice_Menu()
     #remove_choice_menu.grid(row = 0, column = 0)
