@@ -12,30 +12,36 @@ TITLE_FONT = ("Times New Roman", 24)
 BUTTON_FONT = ("Arial", 15)
 
 #Classes go here
-class MainMenu(tk.Frame):
+
+class Screen(tk.Frame):
+    
+    current = 0
+    
     def __init__(self):
         tk.Frame.__init__(self)
+
+class MainMenu(Screen):
+    def __init__(self):
+        Screen.__init__(self)
         
-        
-        
-        self.lbl_title = tk.Label(text = "Game Library", font = TITLE_FONT)
+        self.lbl_title = tk.Label(self, text = "Game Library", font = TITLE_FONT)
         self.lbl_title.grid(row = 0, column = 0, sticky = "news")
-        self.btn_add = tk.Button(text = "Add", font = BUTTON_FONT)
+        self.btn_add = tk.Button(self, text = "Add", font = BUTTON_FONT)
         self.btn_add.grid(row = 1, column = 0)
-        self.btn_edit = tk.Button(text = "Edit", font = BUTTON_FONT)
+        self.btn_edit = tk.Button(self, text = "Edit", font = BUTTON_FONT)
         self.btn_edit.grid(row = 2, column = 0)
-        self.btn_search = tk.Button(text = "Search", font = BUTTON_FONT)
+        self.btn_search = tk.Button(self, text = "Search", font = BUTTON_FONT)
         self.btn_search.grid(row = 3, column = 0)
-        self.btn_remove = tk.Button(text = "Remove", font = BUTTON_FONT)
+        self.btn_remove = tk.Button(self, text = "Remove", font = BUTTON_FONT)
         self.btn_remove.grid(row = 4, column = 0)
-        self.btn_save = tk.Button(text = "Save", font = BUTTON_FONT)
+        self.btn_save = tk.Button(self, text = "Save", font = BUTTON_FONT)
         self.btn_save.grid(row = 5, column = 0)
         
-class Search_Menu(tk.Frame):
+class Search_Menu(Screen):
     def __init__(self):
-        tk.Frame.__init__(self)
+        Screen.__init__(self)
         
-        options = ['Genre', 'Title', 'Year', 'Developer', 'Publisher', 'Price', 'Gamemode', 'Console']
+        options = ['None', 'Genre', 'Title', 'Year', 'Developer', 'Publisher', 'Price', 'Gamemode', 'Console']
         
         self.lbl_title = tk.Label(self, text = "Search Menu", font = TITLE_FONT)
         self.lbl_title.grid(row = 0, column = 0, sticky = "news")
@@ -50,10 +56,13 @@ class Search_Menu(tk.Frame):
         
         self.lbl_search_by = tk.Label(self, text = "Search By:", font = TITLE_FONT)
         self.lbl_search_by.grid(row = 1, column = 0)
+        
         self.tkvar = tk.StringVar(self)
-        self.tkvar.set(options)
-        self.dbx_search_by = tk.OptionMenu(self, set, *options)
-        self.dbx_search_by.grid(row = 1, column = 0)
+        self.tkvar.set(options[0])
+        self.dbx_search_by = tk.OptionMenu(self, self.tkvar, *options)
+        self.dbx_search_by.grid(row = 2, column = 0)
+        
+        self.grid_rowconfigure(1, weight = 1)
         
         self.lbl_search_for = tk.Label(self, text = "Search For:", font = TITLE_FONT)
         self.lbl_search_for.grid(row = 3, column = 0)
@@ -65,106 +74,108 @@ class Search_Menu(tk.Frame):
         self.frm_filters = SubFrame(self)
         self.frm_filters.grid(row = 2, column = 2)
 
-class Save_Menu(tk.Frame):
+class Save_Menu(Screen):
     def __init__(self):
-        tk.Frame.__init__(self)
-        self.lbl_title = tk.Label(text = "Save Notice", font = TITLE_FONT)
+        Screen.__init__(self)
+        self.lbl_title = tk.Label(self, text = "Save Notice", font = TITLE_FONT)
         self.lbl_title.grid(row = 0, column = 0, sticky = "news")
-        self.btn_save = tk.Button(text = "Save", font = BUTTON_FONT)
+        self.btn_save = tk.Button(self, text = "Save", font = BUTTON_FONT)
         self.btn_save.grid(row = 1, column = 0)
 
-class Edit_Choice_Menu(tk.Frame):
+class Edit_Choice_Menu(Screen):
     def __init__(self):
-        tk.Frame.__init__(self)
+        Screen.__init__(self)
         
         options = ['0', '1']
         
-        self.lbl_title = tk.Label(text = "Which file to edit?", font = TITLE_FONT)
+        self.lbl_title = tk.Label(self, text = "Which file to edit?", font = TITLE_FONT)
         self.lbl_title.grid(row = 0, column = 0, sticky = "news")
         
         self.lbl_edit_file = tk.Label(self, text = "File To Edit:", font = TITLE_FONT)
         self.lbl_edit_file.grid(row = 1, column = 0)
         self.tkvar = tk.StringVar(self)
-        self.tkvar.set(options)
-        self.dbx_edit_file = tk.OptionMenu(self, set, *options)
-        self.dbx_edit_file.grid(row = 1, column = 0)        
+        self.tkvar.set(options[0])
+        self.dbx_edit_file = tk.OptionMenu(self, self.tkvar, *options)
+        self.dbx_edit_file.grid(row = 2, column = 0)        
         
-        self.btn_cancel = tk.Button(text = "Cancel", font = BUTTON_FONT)
-        self.btn_cancel.grid(row = 1, column = 0)
-        self.btn_ok = tk.Button(text = "OK", font = BUTTON_FONT)
-        self.btn_ok.grid(row = 1, column = 1)
+        self.btn_cancel = tk.Button(self, text = "Cancel", font = BUTTON_FONT)
+        self.btn_cancel.grid(row = 3, column = 0)
+        self.btn_ok = tk.Button(self, text = "OK", font = BUTTON_FONT)
+        self.btn_ok.grid(row = 3, column = 1)
         
-class Edit_Menu(tk.Frame):
+        self.grid_rowconfigure(3,weight=1)
+        
+class Edit_Menu(Screen):
     def __init__(self):
-        tk.Frame.__init__(self)
-        self.lbl_title = tk.Label(text = "Edit Menu", font = TITLE_FONT)
+        Screen.__init__(self)
+        self.lbl_title = tk.Label(self, text = "Edit Menu", font = TITLE_FONT)
         self.lbl_title.grid(row = 0, column = 0, sticky = "news")
-        self.btn_cancel = tk.Button(text = "Cancel", font = BUTTON_FONT)
+        self.btn_cancel = tk.Button(self, text = "Cancel", font = BUTTON_FONT)
         self.btn_cancel.grid(row = 6, column = 0)
-        self.btn_reset = tk.Button(text = "Reset", font = BUTTON_FONT)
+        self.btn_reset = tk.Button(self, text = "Reset", font = BUTTON_FONT)
         self.btn_reset.grid(row = 6, column = 1)
-        self.btn_confirm = tk.Button(text = "Confirm", font = BUTTON_FONT)
+        self.btn_confirm = tk.Button(self, text = "Confirm", font = BUTTON_FONT)
         self.btn_confirm.grid(row = 6, column = 2)
         
-        self.lbl_genre = tk.Label(text = "Genre:", font = TITLE_FONT)
+        self.lbl_genre = tk.Label(self, text = "Genre:", font = TITLE_FONT)
         self.lbl_genre.grid(row = 1, column = 0)
         
-        self.ent_genre = tk.Entry(font = BUTTON_FONT)
+        self.ent_genre = tk.Entry(self, font = BUTTON_FONT)
         self.ent_genre.grid(row = 1, column = 1)        
         
-        self.lbl_dev = tk.Label(text = "Developer:", font = TITLE_FONT)
+        self.lbl_dev = tk.Label(self, text = "Developer:", font = TITLE_FONT)
         self.lbl_dev.grid(row = 1, column = 2)        
         
-        self.ent_dev = tk.Entry(font = BUTTON_FONT)
+        self.ent_dev = tk.Entry(self, font = BUTTON_FONT)
         self.ent_dev.grid(row = 1, column = 3)        
         
-        self.lbl_pub = tk.Label(text = "Publisher:", font = TITLE_FONT)
+        self.lbl_pub = tk.Label(self, text = "Publisher:", font = TITLE_FONT)
         self.lbl_pub.grid(row = 2, column = 0)        
         
-        self.ent_pub = tk.Entry(font = BUTTON_FONT)
+        self.ent_pub = tk.Entry(self, font = BUTTON_FONT)
         self.ent_pub.grid(row = 2, column = 1)        
         
-        self.lbl_year = tk.Label(text = "Year Released:", font = TITLE_FONT)
+        self.lbl_year = tk.Label(self, text = "Year Released:", font = TITLE_FONT)
         self.lbl_year.grid(row = 2, column = 2)        
         
-        self.ent_year = tk.Entry(font = BUTTON_FONT)
+        self.ent_year = tk.Entry(self, font = BUTTON_FONT)
         self.ent_year.grid(row = 2, column = 3)        
         
-        self.lbl_game_title = tk.Label(text = "Title:", font = TITLE_FONT)
+        self.lbl_game_title = tk.Label(self, text = "Title:", font = TITLE_FONT)
         self.lbl_game_title.grid(row = 3, column = 0)        
         
-        self.ent_game_title = tk.Entry(font = BUTTON_FONT)
+        self.ent_game_title = tk.Entry(self, font = BUTTON_FONT)
         self.ent_game_title.grid(row = 3, column = 1)
         
-class Remove_Choice_Menu(tk.Frame):
+class Remove_Choice_Menu(Screen):
     def __init__(self):
-        tk.Frame.__init__(self)
+        Screen.__init__(self)
         
         options = ['0', '1']
         
-        self.lbl_title = tk.Label(text = "Choose file to remove!", font = TITLE_FONT)
+        self.lbl_title = tk.Label(self, text = "Choose file to remove!", font = TITLE_FONT)
         self.lbl_title.grid(row = 0, column = 0, sticky = "news")
         
         self.lbl_remove_file = tk.Label(self, text = "File To Remove:", font = TITLE_FONT)
         self.lbl_remove_file.grid(row = 1, column = 0)
         self.tkvar = tk.StringVar(self)
-        self.tkvar.set(options)
-        self.dbx_remove_file = tk.OptionMenu(self, set, *options)
-        self.dbx_remove_file.grid(row = 1, column = 0)        
+        self.tkvar.set(options[0])
+        self.dbx_remove_file = tk.OptionMenu(self, self.tkvar, *options)
+        self.dbx_remove_file.grid(row = 2, column = 0)        
         
-        self.btn_cancel = tk.Button(text = "Cancel", font = BUTTON_FONT)
-        self.btn_cancel.grid(row = 1, column = 0)
-        self.btn_remove = tk.Button(text = "Remove", font = BUTTON_FONT)
-        self.btn_remove.grid(row = 1, column = 1)
+        self.btn_cancel = tk.Button(self,text = "Cancel", font = BUTTON_FONT)
+        self.btn_cancel.grid(row = 3, column = 0)
+        self.btn_remove = tk.Button(self,text = "Remove", font = BUTTON_FONT)
+        self.btn_remove.grid(row = 3, column = 1)
 
-class Remove_Menu(tk.Frame):
+class Remove_Menu(Screen):
     def __init__(self):
-        tk.Frame.__init__(self)
-        self.lbl_title = tk.Label(text = "Edit Menu", font = TITLE_FONT)
+        Screen.__init__(self)
+        self.lbl_title = tk.Label(self,text = "Remove Menu", font = TITLE_FONT)
         self.lbl_title.grid(row = 0, column = 0, sticky = "news")
-        self.btn_back = tk.Button(text = "Back", font = BUTTON_FONT)
+        self.btn_back = tk.Button(self,text = "Back", font = BUTTON_FONT)
         self.btn_back.grid(row = 1, column = 0)
-        self.btn_confirm = tk.Button(text = "Confirm", font = BUTTON_FONT)
+        self.btn_confirm = tk.Button(self,text = "Confirm", font = BUTTON_FONT)
         self.btn_confirm.grid(row = 1, column = 1)
 
 class SubFrame(tk.Frame):
@@ -216,6 +227,17 @@ if __name__ == "__main__":
     root.title("Game Library")
     root.geometry("750x750")
     
+    Screens = [MainMenu(), Search_Menu(), Save_Menu(), Edit_Choice_Menu(), Edit_Menu(), Remove_Choice_Menu(), Remove_Menu()]
+    Screens[0].grid(row=0,column=0,sticky="news")
+    Screens[1].grid(row=0,column=0,sticky="news")
+    Screens[2].grid(row=0,column=0,sticky="news")
+    Screens[3].grid(row=0,column=0,sticky="news")
+    Screens[4].grid(row=0,column=0,sticky="news")
+    Screens[5].grid(row=0,column=0,sticky="news")
+    Screens[6].grid(row=0,column=0,sticky="news")    
+    
+    root.grid_columnconfigure(0,weight=1)
+    
     main_menu = MainMenu()
     main_menu.grid(row = 0, column = 0, sticky = "news")
     
@@ -237,5 +259,6 @@ if __name__ == "__main__":
     remove_menu = Remove_Menu()
     remove_menu.grid(row = 0, column = 0, sticky = "news")
     
-    main_menu.tkraise()
+    Screens[4].tkraise()
+    
     root.mainloop()
