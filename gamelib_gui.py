@@ -132,40 +132,54 @@ class Edit_Choice_Menu(tk.Frame):
         tk.Frame.__init__(self, master = parent)
         self.parent = parent
         
-        options = ['0', '1']
+        self.options = ['Select An Item']
+        
+        for key in games.keys():
+            self.options.append(games[key][1])
         
         self.lbl_title = tk.Label(self, text = "Which file to edit?", font = TITLE_FONT)
         self.lbl_title.grid(row = 0, column = 0, sticky = "news")
-        
+            
         self.lbl_edit_file = tk.Label(self, text = "File To Edit:", font = TITLE_FONT)
         self.lbl_edit_file.grid(row = 1, column = 0)
-        
+            
         self.tkvar = tk.StringVar(self)
-        self.tkvar.set(options[0])
-        self.dbx_edit_file = tk.OptionMenu(self, self.tkvar, *options)
+        self.tkvar.set(self.options[0])
+        self.dbx_edit_file = tk.OptionMenu(self, self.tkvar, *self.options)
         self.dbx_edit_file.grid(row = 2, column = 0)        
-        
+            
         self.btn_cancel = tk.Button(self, text = "Cancel", font = BUTTON_FONT, command = self.cancel)
         self.btn_cancel.grid(row = 3, column = 0)
-        
+            
         self.btn_ok = tk.Button(self, text = "OK", font = BUTTON_FONT,command = self.raise_edit)
         self.btn_ok.grid(row = 3, column = 1)
-        
+            
         self.grid_rowconfigure(3,weight=1)
-        
-        
         
     def cancel(self):
         self.parent.destroy()
         
     def raise_edit(self):
-        Screen.current = 2
-        Screen.switch_frame()
-        self.parent.destroy()
+        if self.tkvar.get() == self.options[0]:
+            pass
+        else:
+            for i in range(len(self.options)):
+                if self.tkvar.get() == self.options[i]:
+                    Screens[2].edit_key = i
+                    break        
+            Screen.current = 2
+            Screens[Screen.current].update()
+            Screen.switch_frame()
+            self.parent.destroy()
         
 class Edit_Menu(Screen):
     def __init__(self):
         Screen.__init__(self)
+        
+        
+        
+        self.edit_key = 0
+        
         self.lbl_title = tk.Label(self, text = "Edit Menu", font = TITLE_FONT)
         self.lbl_title.grid(row = 0, column = 0, sticky = "news")
         
@@ -208,7 +222,20 @@ class Edit_Menu(Screen):
         self.ent_game_title = tk.Entry(self, font = BUTTON_FONT)
         self.ent_game_title.grid(row = 3, column = 1)
         
-    def back_choice_edit(self):
+    def update(self):
+        entry = games[self.edit_key]
+        self.ent_genre.delete(0, "end")
+        self.ent_genre.insert(0, entry[0])
+        self.ent_game_title.delete(1, "end")
+        self.ent_game_title.insert(1, entry[1])
+        self.ent_dev.delete(2, "end")
+        self.ent_dev.insert(2, entry[2])
+        self.ent_pub.delete(3, "end")
+        self.ent_pub.insert(3, entry[3])
+        self.ent_year.delete(5, "end")
+        self.ent_year.insert(5, entry[5])
+        
+    def back_main(self):
         Screen.current = 0
         Screen.switch_frame()
         
@@ -343,6 +370,8 @@ class SubFrame(tk.Frame):
 ##MAIN
 if __name__ == "__main__":
     pickle_file = open("game_lib.pickle", "rb")
+    games = pickle.load(pickle_file)
+    pickle_file.close()
     root = tk.Tk()
     root.title("Game Library")
     root.geometry("750x750")
