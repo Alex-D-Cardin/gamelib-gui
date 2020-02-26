@@ -56,6 +56,12 @@ class MainMenu(Screen):
         frm_edit_list = Edit_Choice_Menu(pop_up)
         frm_edit_list.grid(row=0,column=0)
         
+    def go_remove(self):
+        pop_up = tk.Tk()
+        pop_up.title("Remove")
+        frm_remove_list = Remove_Choice_Menu_Choice_Menu(pop_up)
+        frm_remove_list.grid(row=0,column=0)
+        
     #def go_remove(self):
         #Screen.current = 3
         #Screen.switch_frame()
@@ -176,8 +182,6 @@ class Edit_Menu(Screen):
     def __init__(self):
         Screen.__init__(self)
         
-        
-        
         self.edit_key = 0
         
         self.lbl_title = tk.Label(self, text = "Edit Menu", font = TITLE_FONT)
@@ -240,14 +244,34 @@ class Edit_Menu(Screen):
         Screen.switch_frame()
         
     def confirm_main(self):
+        entry = []
+        entry.append(self.ent_genre.get())
+        entry.append(self.ent_game_title.get())
+        entry.append(self.ent_dev.get())
+        entry.append(self.ent_pub.get())
+        entry.append(self.ent_year.get())
+        entry.append(0)
+        entry.append(0)
+        entry.append(0)
+        entry.append(0)
+        entry.append(0)
+        entry.append(0)
+        entry.append(0)
+        #entry.append(self.scr_rotes.get(0.0,"end")) scroll wheel, which I don't have
+        games[self.edit_key] = entry
         Screen.current = 0
         Screen.switch_frame()
         
 class Remove_Choice_Menu(tk.Frame):
     def __init__(self, parent):
         tk.Frame.__init__(self, master = parent)
+        self.parent = parent
         
-        options = ['0', '1']
+        self.options = ['Select An Item']
+        
+        for key in games.keys():
+            self.options.append(games[key][1])
+        
         
         self.lbl_title = tk.Label(self, text = "Choose file to remove!", font = TITLE_FONT)
         self.lbl_title.grid(row = 0, column = 0, sticky = "news")
@@ -256,8 +280,8 @@ class Remove_Choice_Menu(tk.Frame):
         self.lbl_remove_file.grid(row = 1, column = 0)
         
         self.tkvar = tk.StringVar(self)
-        self.tkvar.set(options[0])
-        self.dbx_remove_file = tk.OptionMenu(self, self.tkvar, *options)
+        self.tkvar.set(self.options[0])
+        self.dbx_remove_file = tk.OptionMenu(self, self.tkvar, *self.options)
         self.dbx_remove_file.grid(row = 2, column = 0)        
         
         self.btn_cancel = tk.Button(self,text = "Cancel", font = BUTTON_FONT, command = self.back_main)
