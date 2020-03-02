@@ -7,6 +7,7 @@
 import pickle
 import tkinter as tk
 from tkinter.scrolledtext import ScrolledText as st
+from tkinter import messagebox
 
 TITLE_FONT = ("Times New Roman", 24)
 BUTTON_FONT = ("Arial", 15)
@@ -225,20 +226,27 @@ class Edit_Menu(Screen):
         
         self.ent_game_title = tk.Entry(self, font = BUTTON_FONT)
         self.ent_game_title.grid(row = 3, column = 1)
+
+        self.lbl_console = tk.Label(self, text = "Console:", font = TITLE_FONT)
+        self.lbl_console.grid(row = 3, column = 2)        
+        
+        self.ent_console = tk.Entry(self, font = BUTTON_FONT)
+        self.ent_console.grid(row = 3, column = 3)
         
     def update(self):
         entry = games[self.edit_key]
         self.ent_genre.delete(0, "end")
         self.ent_genre.insert(0, entry[0])
-        self.ent_game_title.delete(1, "end")
-        self.ent_game_title.insert(1, entry[1])
-        self.ent_dev.delete(2, "end")
-        self.ent_dev.insert(2, entry[2])
-        self.ent_pub.delete(3, "end")
-        self.ent_pub.insert(3, entry[3])
-        self.ent_year.delete(5, "end")
-        self.ent_year.insert(5, entry[5])
-        
+        self.ent_game_title.delete(0, "end")
+        self.ent_game_title.insert(0, entry[1])
+        self.ent_dev.delete(0, "end")
+        self.ent_dev.insert(0, entry[2])
+        self.ent_pub.delete(0, "end")
+        self.ent_pub.insert(0, entry[3])
+        self.ent_year.delete(0, "end")
+        self.ent_year.insert(0, entry[5])
+        self.ent_console.delete(0, "end")
+        self.ent_console.insert(0, entry[4])
     def back_main(self):
         Screen.current = 0
         Screen.switch_frame()
@@ -322,13 +330,12 @@ class Add_Menu(Screen):
     def __init__(self):
         Screen.__init__(self)
         
+        self.edit_key = 0
+        
         options = ['0', '1']
         
-        self.lbl_title = tk.Label(self, text = "Save menu", font = TITLE_FONT)
+        self.lbl_title = tk.Label(self, text = "Add menu", font = TITLE_FONT)
         self.lbl_title.grid(row = 0, column = 0, sticky = "news")
-        
-        self.lbl_add_file = tk.Label(self, text = "File To Add:", font = TITLE_FONT)
-        self.lbl_add_file.grid(row = 1, column = 0)
         
         self.tkvar = tk.StringVar(self)
         self.tkvar.set(options[0])
@@ -336,10 +343,46 @@ class Add_Menu(Screen):
         self.dbx_add_file.grid(row = 2, column = 0)
         
         self.btn_cancel = tk.Button(self, text = "Cancel", font = BUTTON_FONT, command = self.back_main)
-        self.btn_cancel.grid(row = 3, column = 0)
+        self.btn_cancel.grid(row = 4, column = 0)
         
         self.btn_confirm = tk.Button(self, text = "Confirm", font = BUTTON_FONT, command = self.return_main)
-        self.btn_confirm.grid(row = 4, column = 0)
+        self.btn_confirm.grid(row = 4, column = 1)
+        
+        self.lbl_genre = tk.Label(self, text = "Genre:", font = TITLE_FONT)
+        self.lbl_genre.grid(row = 1, column = 0)
+        
+        self.ent_genre = tk.Entry(self, font = BUTTON_FONT)
+        self.ent_genre.grid(row = 1, column = 1)        
+        
+        self.lbl_dev = tk.Label(self, text = "Developer:", font = TITLE_FONT)
+        self.lbl_dev.grid(row = 1, column = 2)        
+        
+        self.ent_dev = tk.Entry(self, font = BUTTON_FONT)
+        self.ent_dev.grid(row = 1, column = 3)        
+        
+        self.lbl_pub = tk.Label(self, text = "Publisher:", font = TITLE_FONT)
+        self.lbl_pub.grid(row = 2, column = 0)        
+        
+        self.ent_pub = tk.Entry(self, font = BUTTON_FONT)
+        self.ent_pub.grid(row = 2, column = 1)        
+        
+        self.lbl_year = tk.Label(self, text = "Year Released:", font = TITLE_FONT)
+        self.lbl_year.grid(row = 2, column = 2)        
+        
+        self.ent_year = tk.Entry(self, font = BUTTON_FONT)
+        self.ent_year.grid(row = 2, column = 3)        
+        
+        self.lbl_game_title = tk.Label(self, text = "Title:", font = TITLE_FONT)
+        self.lbl_game_title.grid(row = 3, column = 0)        
+        
+        self.ent_game_title = tk.Entry(self, font = BUTTON_FONT)
+        self.ent_game_title.grid(row = 3, column = 1)
+        
+        self.lbl_console = tk.Label(self, text = "Console:", font = TITLE_FONT)
+        self.lbl_console.grid(row = 3, column = 2)        
+        
+        self.ent_console = tk.Entry(self, font = BUTTON_FONT)
+        self.ent_console.grid(row = 3, column = 3)        
 
     def back_main(self):
         Screen.current = 0
@@ -348,6 +391,30 @@ class Add_Menu(Screen):
     def return_main(self):
         Screen.current = 0
         Screen.switch_frame()
+        entry = []
+        entry.append(self.ent_genre.get())
+        entry.append(self.ent_game_title.get())
+        entry.append(self.ent_dev.get())
+        entry.append(self.ent_pub.get())
+        entry.append(self.ent_year.get())
+        entry.append(self.ent_console.get())
+        entry.append(0)
+        entry.append(0)
+        entry.append(0)
+        entry.append(0)
+        entry.append(0)
+        entry.append(0)
+        entry.append(0)
+        entry.append(0)
+        #entry.append(self.scr_rotes.get(0.0,"end")) scroll wheel, which I don't have
+        games[len(games) +1] = entry
+        messagebox.showinfo(message = "Entry has been added.")
+        self.ent_genre.delete(0, "end")
+        self.ent_game_title.delete(0, "end")
+        self.ent_dev.delete(0, "end")
+        self.ent_pub.delete(0, "end")
+        self.ent_year.delete(0, "end")
+        self.ent_console.delete(0, "end")
 
 class SubFrame(tk.Frame):
     def __init__(self, parent):
