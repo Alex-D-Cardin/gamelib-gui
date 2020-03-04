@@ -6,7 +6,7 @@
 
 import pickle
 import tkinter as tk
-from tkinter.scrolledtext import ScrolledText as st
+from tkinter.scrolledtext import ScrolledText
 from tkinter import messagebox
 
 TITLE_FONT = ("Times New Roman", 24)
@@ -74,44 +74,129 @@ class MainMenu(Screen):
 class Search_Menu(Screen):
     def __init__(self):
         Screen.__init__(self)
+        self.grid_columnconfigure(0, weight = 1)
+        self.grid_columnconfigure(1, weight = 1)
+        self.grid_columnconfigure(2, weight = 1)
+        self.grid_columnconfigure(3, weight = 1)
+        self.grid_columnconfigure(4, weight = 1)
+        self.grid_columnconfigure(5, weight = 1)
+        self.grid_columnconfigure(6, weight = 1)
+        self.grid_columnconfigure(7, weight = 1)
         
-        options = ['None', 'Genre', 'Title', 'Year', 'Developer', 'Publisher', 'Price', 'Gamemode', 'Console']
+        options = ['None', 'Genre', 'Title', 'Year', 'Developer', 'Publisher', 'Price', 'Gamemode', 'Console', 'Rating', 'Progress', 'Date Purchased']
         
         self.lbl_title = tk.Label(self, text = "Search Menu", font = TITLE_FONT)
-        self.lbl_title.grid(row = 0, column = 0, sticky = "news")
+        self.lbl_title.grid(row = 0, column = 0, columnspan = 2, sticky = "news")
         
         self.btn_back = tk.Button(self, text = "Back", font = BUTTON_FONT, command = self.back_search)
-        self.btn_back.grid(row = 5, column = 0)
+        self.btn_back.grid(row = 7, column = 0, columnspan = 2, sticky = "news")
         
-        self.btn_clear = tk.Button(self, text = "Clear", font = BUTTON_FONT)
-        self.btn_clear.grid(row = 5, column = 1)
+        self.btn_clear = tk.Button(self, text = "Clear", font = BUTTON_FONT, command = self.clear)
+        self.btn_clear.grid(row = 7, column = 2, columnspan = 2, sticky = "news")
         
-        self.btn_submit = tk.Button(self, text = "Submit", font = BUTTON_FONT, command = self.confirm_search)
-        self.btn_submit.grid(row = 5, column = 2)
-        
-        self.grid_rowconfigure(5, weight = 1)
+        self.btn_submit = tk.Button(self, text = "Submit", font = BUTTON_FONT, command = self.sumbit_search)
+        self.btn_submit.grid(row = 7, column = 4, columnspan = 2, sticky = "news")
         
         self.lbl_search_by = tk.Label(self, text = "Search By:", font = TITLE_FONT)
-        self.lbl_search_by.grid(row = 1, column = 0)
+        self.lbl_search_by.grid(row = 1, column = 0, columnspan = 2, sticky = "news")
         
         self.tkvar = tk.StringVar(self)
         self.tkvar.set(options[0])
         self.dbx_search_by = tk.OptionMenu(self, self.tkvar, *options)
-        self.dbx_search_by.grid(row = 2, column = 0)
-        
-        self.grid_rowconfigure(1, weight = 1)
+        self.dbx_search_by.grid(row = 2, column = 0, columnspan = 2, sticky = "news")
         
         self.lbl_search_for = tk.Label(self, text = "Search For:", font = TITLE_FONT)
-        self.lbl_search_for.grid(row = 3, column = 0)
+        self.lbl_search_for.grid(row = 3, column = 0, columnspan = 2, sticky = "news")
         
         self.ent_for = tk.Entry(self, font = BUTTON_FONT)
-        self.ent_for.grid(row = 4, column = 0)
+        self.ent_for.grid(row = 4, column = 0, columnspan = 2, sticky = "news")
         
         self.lbl_filters = tk.Label(self, text = "Filters", font = TITLE_FONT)
-        self.lbl_filters.grid(row = 1, column = 2)
+        self.lbl_filters.grid(row = 0, column = 3, columnspan = 4, sticky = "news")
         
         self.frm_filters = SubFrame(self)
-        self.frm_filters.grid(row = 2, column = 2)
+        self.frm_filters.grid(row = 1, column = 3, rowspan = 4, columnspan = 4, sticky = "news")
+        
+        self.scr_results = ScrolledText(self, font = BUTTON_FONT, width = 100, height = 8)
+        self.scr_results.grid(row = 6, column = 0, columnspan = 6, sticky = "news")
+        
+        for key in games.keys():
+            entry = games[key]
+            self.filter_print(entry)
+            
+    def sumbit_search(self):
+        self.scr_results.delete(0.0, "end")
+        for key in games.keys():
+            entry = games[key]
+            self.filter_print(entry)
+            
+    def clear(self):
+        self.frm_filters.genre_var.set(False)
+        self.frm_filters.title_var.set(False)
+        self.frm_filters.dev_var.set(False)
+        self.frm_filters.pub_var.set(False)
+        self.frm_filters.console_var.set(False)
+        self.frm_filters.price_var.set(False)
+        self.frm_filters.gamemode_var.set(False)
+        self.frm_filters.year_var.set(False)
+        self.frm_filters.notes_var.set(False)
+        self.frm_filters.progress_var.set(False)
+        self.frm_filters.date_purchased_var.set(False)
+        self.frm_filters.rating_var.set(False)
+        
+        self.scr_results.delete(0.0, "end")
+        
+    def filter_print(self, entry):
+        if self.frm_filters.genre_var.get() == True:
+            msg = entry[0] + "\n"
+            self.scr_results.insert("insert", msg)
+            
+        if self.frm_filters.title_var.get() == True:
+            msg = entry[1] + "\n"
+            self.scr_results.insert("insert", msg)
+        
+        if self.frm_filters.dev_var.get() == True:
+            msg = entry[2] + "\n"
+            self.scr_results.insert("insert", msg)        
+        
+        if self.frm_filters.pub_var.get() == True:
+            msg = entry[3] + "\n"
+            self.scr_results.insert("insert", msg)        
+        
+        if self.frm_filters.console_var.get() == True:
+            msg = entry[4] + "\n"
+            self.scr_results.insert("insert", msg)
+        
+        if self.frm_filters.price_var.get() == True:
+            msg = entry[5] + "\n"
+            self.scr_results.insert("insert", msg)
+        
+        if self.frm_filters.gamemode_var.get() == True:
+            msg = entry[6] + "\n"
+            self.scr_results.insert("insert", msg)        
+        
+        if self.frm_filters.year_var.get() == True:
+            msg = entry[7] + "\n"
+            self.scr_results.insert("insert", msg)        
+        
+        if self.frm_filters.notes_var.get() == True:
+            msg = entry[8] + "\n"
+            self.scr_results.insert("insert", msg)
+            
+        if self.frm_filters.progress_var.get() == True:
+            msg = entry[9] + "\n"
+            self.scr_results.insert("insert", msg)        
+        
+        if self.frm_filters.date_purchased_var.get() == True:
+            msg = entry[10] + "\n"
+            self.scr_results.insert("insert", msg)        
+        
+        if self.frm_filters.rating_var.get() == True:
+            msg = entry[11] + "\n"
+            self.scr_results.insert("insert", msg)        
+        
+        msg = "*****************\n"
+        self.scr_results.insert("insert", msg)
 
     def back_search(self):
         Screen.current = 0
@@ -160,8 +245,7 @@ class Edit_Choice_Menu(tk.Frame):
             
         self.btn_ok = tk.Button(self, text = "OK", font = BUTTON_FONT,command = self.raise_edit)
         self.btn_ok.grid(row = 3, column = 1)
-            
-        self.grid_rowconfigure(3,weight=1)
+        
         
     def cancel(self):
         self.parent.destroy()
@@ -420,40 +504,57 @@ class SubFrame(tk.Frame):
     def __init__(self, parent):
         tk.Frame.__init__(self, master = parent)
         
-        self.chk_title = tk.Checkbutton(self, text = "Title")
-        self.chk_title.grid(row = 0, column = 0)
-        
-        self.chk_genre = tk.Checkbutton(self, text = "Genre")
-        self.chk_genre.grid(row = 0, column = 1)
-        
-        self.chk_developer = tk.Checkbutton(self, text = "Developer")
-        self.chk_developer.grid(row = 0 , column = 2)
-        
-        self.chk_publisher = tk.Checkbutton(self, text = "Publisher")
-        self.chk_publisher.grid(row = 1, column = 0)
-        
-        self.chk_year = tk.Checkbutton(self, text = "Year")
-        self.chk_year.grid(row = 1, column = 1)
-        
-        self.chk_price = tk.Checkbutton(self, text = "Price")
-        self.chk_price.grid(row = 1, column = 2)
-        
-        self.chk_console = tk.Checkbutton(self, text = "Console")
-        self.chk_console.grid(row = 2, column = 0)
-        
-        self.chk_gamemode = tk.Checkbutton(self, text = "Gamemode")
-        self.chk_gamemode.grid(row = 2, column = 1)
-        
-        self.chk_notes = tk.Checkbutton(self, text = "Notes")
-        self.chk_notes.grid(row = 2, column = 2)
-        
-        #self.grid_rowconfigure(0, weight = 1)
-        #self.grid_rowconfigure(1, weight = 1)
-        #self.grid_rowconfigure(2, weight = 1)
-        
         self.grid_columnconfigure(0, weight = 1)
         self.grid_columnconfigure(1, weight = 1)
-        self.grid_columnconfigure(2, weight = 1)
+        self.grid_columnconfigure(2, weight = 1)        
+        
+        self.title_var = tk.BooleanVar(self, True)
+        self.chk_title = tk.Checkbutton(self, text = "Title", variable = self.title_var)
+        self.chk_title.grid(row = 0, column = 0, sticky = "news")
+        
+        self.genre_var = tk.BooleanVar(self, True)
+        self.chk_genre = tk.Checkbutton(self, text = "Genre", variable = self.genre_var)
+        self.chk_genre.grid(row = 0, column = 1, sticky = "news")
+        
+        self.dev_var = tk.BooleanVar(self, True)
+        self.chk_developer = tk.Checkbutton(self, text = "Developer", variable = self.dev_var)
+        self.chk_developer.grid(row = 0 , column = 2, sticky = "news")
+        
+        self.pub_var = tk.BooleanVar(self, True)
+        self.chk_publisher = tk.Checkbutton(self, text = "Publisher", variable = self.pub_var)
+        self.chk_publisher.grid(row = 1, column = 0, sticky = "news")
+        
+        self.year_var = tk.BooleanVar(self, True)
+        self.chk_year = tk.Checkbutton(self, text = "Year", variable = self.year_var)
+        self.chk_year.grid(row = 1, column = 1, sticky = "news")
+        
+        self.price_var = tk.BooleanVar(self, True)
+        self.chk_price = tk.Checkbutton(self, text = "Price", variable = self.price_var)
+        self.chk_price.grid(row = 1, column = 2, sticky = "news")
+        
+        self.console_var = tk.BooleanVar(self, True)
+        self.chk_console = tk.Checkbutton(self, text = "Console", variable = self.console_var)
+        self.chk_console.grid(row = 2, column = 0, sticky = "news")
+        
+        self.gamemode_var = tk.BooleanVar(self, True)
+        self.chk_gamemode = tk.Checkbutton(self, text = "Gamemode", variable = self.gamemode_var)
+        self.chk_gamemode.grid(row = 2, column = 1, sticky = "news")
+        
+        self.notes_var = tk.BooleanVar(self, True)
+        self.chk_notes = tk.Checkbutton(self, text = "Notes", variable = self.notes_var)
+        self.chk_notes.grid(row = 2, column = 2, sticky = "news")
+        
+        self.date_purchased_var = tk.BooleanVar(self, True)
+        self.chk_date_purchased = tk.Checkbutton(self, text = "Date Purchased", variable = self.date_purchased_var)
+        self.chk_date_purchased.grid(row = 3, column = 0, sticky = "news")
+        
+        self.rating_var = tk.BooleanVar(self, True)
+        self.chk_rating = tk.Checkbutton(self, text = "Rating", variable = self.rating_var)
+        self.chk_rating.grid(row = 3, column = 1, sticky = "news")
+        
+        self.progress_var = tk.BooleanVar(self, True)
+        self.chk_progress = tk.Checkbutton(self, text = "Progess", variable = self.progress_var)
+        self.chk_progress.grid(row = 3, column = 2, sticky = "news")
 
 #Functions go here
 
@@ -465,7 +566,6 @@ if __name__ == "__main__":
     pickle_file.close()
     root = tk.Tk()
     root.title("Game Library")
-    root.geometry("750x750")
     
     Screens = [MainMenu(), Search_Menu(), Edit_Menu(), Remove_Menu(), Add_Menu()]
     Screens[0].grid(row=0,column=0,sticky="news")
